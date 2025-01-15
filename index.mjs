@@ -5,6 +5,9 @@ dotenv.config();
 import db from "./db/conn.mjs";
 import cors from "cors";
 
+// Routes
+import users from "./routes/user.mjs";
+
 // Port setup
 const PORT = process.env.PORT || 5052;
 
@@ -15,10 +18,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Calling on the routes
+app.use("/api/users", users);
+
 // default, catch-all route
-app.get("/*", (req, res) => {
-  res.redirect("/");
+// TODO routes
+app.get("/", (req, res) => {
+  res.send("Welcome to Toddler Words API");
 });
+// app.get("/*", (req, res) => {
+//   res.send("Success");
+//   // res.redirect("/");
+// });
 
 //Global error handling
 app.use((err, _req, res, next) => {
