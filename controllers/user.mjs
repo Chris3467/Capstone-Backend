@@ -25,13 +25,17 @@ async function create(req, res) {
 // allows user to login to their account
 async function login(req, res) {
   try {
+    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
     console.log(user);
     if (!user) throw new Error("User not found");
     // * if we find the user, compare the password, but it is stored encrypted
     // * 1st argument is from the credentials that the user typed in
     // * 2nd argument is what is stored in the database
+    console.log(req.body.password, "applez");
+    console.log(user.password, "banna");
     const match = await bcrypt.compare(req.body.password, user.password);
+    console.log(match);
     if (!match) throw new Error("Invalid password");
     const token = createJWT(user);
     res.json(token);

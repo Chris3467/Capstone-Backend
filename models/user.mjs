@@ -37,6 +37,7 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   // if the password has changed, we need to update the password with the computed hash
   this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+
   return next();
 });
 
