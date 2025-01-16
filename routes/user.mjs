@@ -6,4 +6,10 @@ import userController from "../controllers/user.mjs";
 router.post("/", userController.create);
 router.post("/login", userController.login);
 
+// Delete a user
+router.delete("/:id", userController.deleteUser);
+
+// Update user profile
+router.put("/:id", userController.updateUser);
+
 export default router;

@@ -7,13 +7,11 @@ async function create(req, res) {
   try {
     const createdUser = await User.create(req.body);
     const token = createJWT(createdUser);
-    res
-      .status(201)
-      .json({
-        token: token,
-        message: "User created successfully",
-        user: createdUser,
-      });
+    res.status(201).json({
+      token: token,
+      message: "User created successfully",
+      user: createdUser,
+    });
   } catch (err) {
     console.log(err);
     res.status(400).json({
@@ -52,4 +50,35 @@ function createJWT(user) {
     { expiresIn: "24h" }
   );
 }
-export default { create, login, createJWT };
+
+const deleteUser = async (req, res) => {
+  try {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    console.log(deletedUser);
+    res.status(200).json(deletedUser);
+  } catch (err) {
+    res.send(err).status(400);
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body, // This contains the updates sent from the frontend
+      { new: true, runValidators: true } // `new: true` returns the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    console.log(updatedUser); // Log the updated user for debugging
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(400).json({ message: "Error updating user", error: err });
+  }
+};
+
+export default { create, login, createJWT, deleteUser, updateUser };
